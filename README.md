@@ -6,6 +6,12 @@ Creates a basic AWS Cognito setup with a mandatory 8 character long password pol
 
 Please note the variable ```ignore_changes``` in the ```./main.tf``` file is used to prevent re-deployments from occurring. 
 
+There's no built in support yet for;
+
+- SNS Email sending and template, instead it uses the built in email support with sending limitations.
+- SMS sending
+- custom AWS Lambda triggers
+
 ## How to use:
 
 ```terraform
