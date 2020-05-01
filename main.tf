@@ -28,7 +28,7 @@ resource "aws_cognito_user_pool" "_" {
 
   dynamic "schema" {
     for_each = var.schema_map
-    
+
     content {
       name                = schema.value.name
       attribute_data_type = schema.value.attribute_data_type
@@ -38,7 +38,10 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   lifecycle {
-    ignore_changes = [ schema ]
+    ignore_changes = [
+      schema,
+      password_policy.temporary_password_validity_days
+    ]
   }
 
   tags = {
