@@ -44,5 +44,8 @@ module "cognito" {
 
 ## Changelog
 
+### v1.1
+ - Added ignore on ``password_policy[0].temporary_password_validity_days``
+ 
 ### v1.0
  - Initial release
