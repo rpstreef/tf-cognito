@@ -48,3 +48,33 @@ variable "schema_map" {
   default = []
   description = "Creates 1 or more Schema blocks"
 }
+
+variable "default_email_option" {
+  type        = string
+  default     = "CONFIRM_WITH_CODE"
+  description = "The default email option. Must be either CONFIRM_WITH_CODE or CONFIRM_WITH_LINK. Defaults to CONFIRM_WITH_CODE."
+}
+
+variable "email_message" {
+  type        = string
+  default     = null
+  description = "The email message template. Must contain the {####} placeholder. Conflicts with email_verification_message argument."
+}
+
+variable "email_message_by_link" {
+  type        = string
+  default     = null
+  description = "The email message template for sending a confirmation link to the user, it must contain the {##Click Here##} placeholder."
+}
+
+variable "email_subject" {
+  type        = string
+  default     = null
+  description = "The subject line for the email message template. Conflicts with email_verification_subject argument."
+}
+
+variable "email_subject_by_link" {
+  type        = string
+  default     = null
+  description = "The subject line for the email message template for sending a confirmation link to the user."
+}

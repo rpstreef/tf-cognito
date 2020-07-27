@@ -14,6 +14,7 @@ resource "aws_cognito_user_pool" "_" {
   alias_attributes         = var.alias_attributes
   auto_verified_attributes = var.auto_verified_attributes
 
+
   admin_create_user_config {
     allow_admin_create_user_only = false
   }
@@ -35,6 +36,14 @@ resource "aws_cognito_user_pool" "_" {
       mutable             = schema.value.mutable
       required            = schema.value.required
     }
+  }
+
+  verification_message_template {
+    default_email_option  = var.default_email_option
+    email_message         = var.email_message
+    email_message_by_link = var.email_message_by_link
+    email_subject         = var.email_subject
+    email_subject_by_link = var.email_subject_by_link
   }
 
   lifecycle {
