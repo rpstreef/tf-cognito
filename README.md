@@ -44,6 +44,10 @@ module "cognito" {
 
 ## Changelog
 
+### v1.2
+ - Added mail template variables (cognito based emails)
+ - Verify by Link or code variable
+
 ### v1.1
  - Added ignore on ``password_policy[0].temporary_password_validity_days``
  
