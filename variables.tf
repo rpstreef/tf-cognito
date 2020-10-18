@@ -78,3 +78,67 @@ variable "email_subject_by_link" {
   default     = null
   description = "The subject line for the email message template for sending a confirmation link to the user."
 }
+
+# -----------------------------------------------------------------------------
+# Variables: Cognito Lambda triggers
+# -----------------------------------------------------------------------------
+
+variable "lambda_create_auth_challenge" {
+  type        = string
+  description = "(Optional) The ARN of an AWS Lambda creating an authentication challenge."
+  default     = null
+}
+
+variable "lambda_custom_message" {
+  type        = string
+  description = "(Optional) The ARN of a custom message AWS Lambda trigger."
+  default     = null
+}
+
+variable "lambda_define_auth_challenge" {
+  type        = string
+  description = "(Optional) The ARN of an AWS Lambda that defines the authentication challenge."
+  default     = null
+}
+
+variable "lambda_post_authentication" {
+  type        = string
+  description = "(Optional) The ARN of a post-authentication AWS Lambda trigger."
+  default     = null
+}
+
+variable "lambda_post_confirmation" {
+  type        = string
+  description = "(Optional) The ARN of a post-confirmation AWS Lambda trigger."
+  default     = null
+}
+
+variable "lambda_pre_authentication" {
+  type        = string
+  description = "(Optional) The ARN of a pre-authentication AWS Lambda trigger."
+  default     = null
+}
+
+variable "lambda_pre_sign_up" {
+  type        = string
+  description = "(Optional) The ARN of a pre-registration AWS Lambda trigger."
+  default     = null
+}
+
+variable "lambda_pre_token_generation" {
+  type        = string
+  description = "(Optional) The ARN of an AWS Lambda that allows customization of identity token claims before token generation."
+  default     = null
+}
+
+variable "lambda_user_migration" {
+  type        = string
+  description = "(Optional) The ARN of the user migration AWS Lambda config type."
+  default     = null
+}
+
+variable "lambda_verify_auth_challenge_response" {
+  type        = string
+  description = "(Optional) The ARN of an AWS Lambda that verifies the authentication challenge response."
+  default     = null
+}
