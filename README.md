@@ -10,7 +10,6 @@ There's no built in support yet for;
 
 - SNS Email sending and template, instead it uses the built in email support with sending limitations.
 - SMS sending
-- custom AWS Lambda triggers
 
 ## How to use:
 
@@ -43,6 +42,10 @@ module "cognito" {
 ```
 
 ## Changelog
+
+### v1.3
+  - updated new to Terraform standards
+  - added Federated login support with for instance Google
 
 ### v1.2
  - Added mail template variables (cognito based emails)

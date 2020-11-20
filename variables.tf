@@ -79,6 +79,12 @@ variable "email_subject_by_link" {
   description = "The subject line for the email message template for sending a confirmation link to the user."
 }
 
+variable "supported_login_providers" {
+  type        = map(string)
+  default     = null
+  description = "Adds support for Federated login with Google (accounts.google.com), Facebook (graph.facebook.com) etc."
+}
+
 # -----------------------------------------------------------------------------
 # Variables: Cognito Lambda triggers
 # -----------------------------------------------------------------------------

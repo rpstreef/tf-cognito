@@ -104,4 +104,6 @@ resource "aws_cognito_identity_pool" "_" {
 
     provider_name = "cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool._.id}"
   }
+
+  supported_login_providers = var.supported_login_providers
 }
