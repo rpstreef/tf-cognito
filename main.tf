@@ -61,6 +61,7 @@ resource "aws_cognito_user_pool" "_" {
   lifecycle {
     ignore_changes = [
       schema,
+      lambda_config,
       password_policy[0].temporary_password_validity_days
     ]
   }

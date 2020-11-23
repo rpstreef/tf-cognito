@@ -11,4 +11,10 @@ resource "aws_cognito_identity_provider" "_" {
   }
 
   attribute_mapping = var.attribute_mapping
+
+   lifecycle {
+    ignore_changes = [
+      provider_details
+    ]
+   }
 }
