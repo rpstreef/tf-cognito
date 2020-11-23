@@ -109,7 +109,7 @@ resource "aws_cognito_identity_pool" "_" {
 }
 
 module "identity_provider" {
-  source = "./identity_provider"
+  source = "./identity-provider"
 
   for_each = var.identity_provider_map
 
