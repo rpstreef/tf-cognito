@@ -68,6 +68,7 @@ module "cognito" {
 ### v1.3
   - updated new to Terraform standards
   - added Federated login support with an example; Google
+  - added all Lambda triggers, provide the appropriate Lambda ARN to enable.
 
 ### v1.2
  - Added mail template variables (cognito based emails)
