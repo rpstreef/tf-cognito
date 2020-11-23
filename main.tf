@@ -31,6 +31,13 @@ resource "aws_cognito_user_pool" "_" {
     allow_admin_create_user_only = false
   }
 
+  email_configuration {
+    email_sending_account  = var.email_sending_account
+    reply_to_email_address = var.email_reply_to_address
+    source_arn             = var.email_source_arn
+    from_email_address     = var.email_from_address
+  }
+
   password_policy {
     minimum_length    = 8
     require_uppercase = true

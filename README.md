@@ -65,6 +65,9 @@ module "cognito" {
 
 ## Changelog
 
+### v1.4
+  - Added email configuration options with default or SES
+
 ### v1.3
   - updated new to Terraform standards
   - added Federated login support with an example; Google.

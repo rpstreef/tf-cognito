@@ -153,3 +153,31 @@ variable "lambda_verify_auth_challenge_response" {
   description = "(Optional) The ARN of an AWS Lambda that verifies the authentication challenge response."
   default     = null
 }
+
+# -----------------------------------------------------------------------------
+# Variables: Email with SES configuration
+# -----------------------------------------------------------------------------
+
+variable "email_sending_account" {
+  type        = string
+  description = "(Optional) The email delivery method to use. 'COGNITO_DEFAULT' for the default email functionality built into Cognito or 'DEVELOPER' to use your Amazon SES configuration."
+  default     = "COGNITO_DEFAULT"
+}
+
+variable "email_reply_to_address" {
+  type        = string
+  description = "(Optional) - The REPLY-TO email address."
+  default     = null
+}
+
+variable "email_source_arn" {
+  type        = string
+  description = "(Optional) - The ARN of the email source."
+  default     = null
+}
+
+variable "email_from_address" {
+  type        = string
+  description = "(Optional) - Sender’s email address or sender’s name with their email address (e.g. 'john@smith.com' or 'John Smith <john@smith.com>')."
+  default     = null
+}
