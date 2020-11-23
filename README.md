@@ -13,6 +13,10 @@ There's no built in support yet for;
 
 ## How to use:
 
+To add a Federation, provide the ``identity_provider_map`` with the appropriate configuration for the supported Fedartion, in this case, Google.
+
+To then enable that login provider for your Cognito identity pool, add ``supported_login_providers`` configuration.
+
 ```terraform
 module "cognito" {
   source = "../../modules/cognito"
@@ -23,6 +27,24 @@ module "cognito" {
 
   cognito_identity_pool_name     = var.cognito_identity_pool_name
   cognito_identity_pool_provider = var.cognito_identity_pool_provider
+
+  supported_login_providers = {
+    "accounts.google.com" = "dfsfsf.apps.googleusercontent.com"
+  }
+
+  identity_provider_map = {
+    google = {
+      provider_name    = "Google"
+      provider_type    = "Google"
+      authorize_scopes = "email"
+      client_id        = "dfsfsf.apps.googleusercontent.com"
+      client_secret    = "sdfsfasdfafsafsafsfsdf"
+
+      attribute_mapping = {
+        email    = "email"
+        username = "sub"
+      }
+    }
 
   schema_map = [
     {
@@ -45,7 +67,7 @@ module "cognito" {
 
 ### v1.3
   - updated new to Terraform standards
-  - added Federated login support with for instance Google
+  - added Federated login support with an example; Google
 
 ### v1.2
  - Added mail template variables (cognito based emails)

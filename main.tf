@@ -108,7 +108,9 @@ resource "aws_cognito_identity_pool" "_" {
   supported_login_providers = var.supported_login_providers
 }
 
-resource "aws_cognito_identity_provider" "_" {
+module "identity_provider" {
+  source = "./identity_provider"
+
   for_each = var.identity_provider_map
 
   user_pool_id  = aws_cognito_user_pool._.id
@@ -116,11 +118,9 @@ resource "aws_cognito_identity_provider" "_" {
   provider_name = each.value.provider_name
   provider_type = each.value.provider_type
 
-  provider_details = {
-    authorize_scopes = each.value.authorize_scopes
-    client_id        = each.value.client_id
-    client_secret    = each.value.client_secret
-  }
+  authorize_scopes = each.value.authorize_scopes
+  client_id        = each.value.client_id
+  client_secret    = each.value.client_secret  
 
   attribute_mapping = each.value.attribute_mapping
 }

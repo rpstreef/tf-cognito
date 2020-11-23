@@ -86,15 +86,7 @@ variable "supported_login_providers" {
 }
 
 variable "identity_provider_map" {
-  type = list(object({
-    provider_name    = string
-    provider_type    = string
-    authorize_scopes = string
-    client_id        = string
-    client_secret    = string
-
-    attribute_mapping = map(string)
-  }))
+  type        = map
   default     = null
   description = "Configure Identity providers (Federation) such as Google and Facebook"
 }
