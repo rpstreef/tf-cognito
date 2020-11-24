@@ -172,7 +172,7 @@ variable "email_reply_to_address" {
 
 variable "email_source_arn" {
   type        = string
-  description = "(Optional) - The ARN of the email source."
+  description = "(Optional) - The ARN of the SES verified email identity to to use. Required if email_sending_account is set to DEVELOPER."
   default     = null
 }
 
