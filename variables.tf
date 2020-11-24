@@ -87,7 +87,7 @@ variable "supported_login_providers" {
 
 variable "identity_provider_map" {
   type        = map
-  default     = null
+  default     = {}
   description = "Configure Identity providers (Federation) such as Google and Facebook"
 }
 # -----------------------------------------------------------------------------
