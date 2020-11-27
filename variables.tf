@@ -90,6 +90,86 @@ variable "identity_provider_map" {
   default     = {}
   description = "Configure Identity providers (Federation) such as Google and Facebook"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: Cognito User Pool Client
+# -----------------------------------------------------------------------------
+
+variable "allowed_oauth_flows" {
+  type        = list(string)
+  description = "(Optional) List of allowed OAuth flows (code, implicit, client_credentials)."
+  default     = []
+}
+
+variable "allowed_oauth_scopes" {
+  type        = list(string)
+  description = "(Optional) List of allowed OAuth scopes (phone, email, openid, profile, and aws.cognito.signin.user.admin)."
+  default     = []
+}
+
+variable "callback_urls" {
+  type        = list(string)
+  description = "(Optional) List of allowed callback URLs for the identity providers."
+  default     = []
+}
+
+variable "supported_identity_providers" {
+  type        = list(string)
+  description = "(Optional) List of provider names for the identity providers that are supported on this client."
+  default     = []
+}
+
+variable "default_redirect_uri" {
+  type        = string
+  description = "(Optional) The default redirect URI. Must be in the list of callback URLs."
+  default     = null
+}
+
+variable "logout_urls" {
+  type        = list(string)
+  default     = []
+  description = "(Optional) List of allowed logout URLs for the identity providers."
+}
+
+variable "explicit_auth_flows" {
+  type        = list(string)
+  description = "(Optional) List of authentication flows (ADMIN_NO_SRP_AUTH, CUSTOM_AUTH_FLOW_ONLY, USER_PASSWORD_AUTH, ALLOW_ADMIN_USER_PASSWORD_AUTH, ALLOW_CUSTOM_AUTH, ALLOW_USER_PASSWORD_AUTH, ALLOW_USER_SRP_AUTH, ALLOW_REFRESH_TOKEN_AUTH)."
+  default     = [
+    "ADMIN_NO_SRP_AUTH",
+    "USER_PASSWORD_AUTH"
+  ]
+}
+
+variable "generate_secret" {
+  type        = bool
+  default     = false
+  description = "(Optional) Should an application secret be generated."
+}
+
+variable "prevent_user_existence_errors" {
+  type        = string
+  default     = "LEGACY"
+  description = "When set to ENABLED and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to LEGACY, those APIs will return a UserNotFoundException exception if the user does not exist in the user pool."
+}
+
+variable "refresh_token_validity" {
+  type        = number
+  default     = 30
+  description = "(Optional) The time limit in days refresh tokens are valid for."
+}
+
+variable "read_attributes" {
+ type        = list(string)
+ default     = []
+ description = "(Optional) List of user pool attributes the application client can read from."
+}
+
+variable " write_attributes" {
+  type        = list(string)
+  default     = []
+  description = "(Optional) List of user pool attributes the application client can write to."
+}
+
 # -----------------------------------------------------------------------------
 # Variables: Cognito Lambda triggers
 # -----------------------------------------------------------------------------

@@ -92,12 +92,27 @@ resource "aws_cognito_user_pool_client" "_" {
   name = "${local.resource_name}-client"
 
   user_pool_id    = aws_cognito_user_pool._.id
-  generate_secret = false
+  generate_secret = var.generate_secret
 
-  explicit_auth_flows = [
-    "ADMIN_NO_SRP_AUTH",
-    "USER_PASSWORD_AUTH",
-  ]
+  allowed_oauth_flows_user_pool_client = false
+
+  allowed_oauth_flows  = var.allowed_oauth_flows
+  allowed_oauth_scopes = var.allowed_oauth_scopes
+  
+  callback_urls        = var.callback_urls
+  logout_urls          = var.logout_urls
+  default_redirect_uri = var.default_redirect_uri
+
+  supported_identity_providers = var.supported_identity_providers
+
+  prevent_user_existence_errors = var.prevent_user_existence_errors
+
+  refresh_token_validity = var.refresh_token_validity
+
+  explicit_auth_flows = var.explicit_auth_flows
+
+  read_attributes  = var.read_attributes
+  write_attributes = var.write_attributes
 }
 
 resource "aws_cognito_identity_pool" "_" {

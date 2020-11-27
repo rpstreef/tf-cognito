@@ -28,6 +28,12 @@ module "cognito" {
   cognito_identity_pool_name     = var.cognito_identity_pool_name
   cognito_identity_pool_provider = var.cognito_identity_pool_provider
 
+  # User Pool Client Configuration
+  allowed_oauth_flows          = [ "implicit" ]
+  allowed_oauth_scopes         = [ "aws.cognito.signin.user.admin" ]
+  callback_urls                = [ "https://google.com" ]
+  supported_identity_providers = [ "Google" ]
+
   supported_login_providers = {
     "accounts.google.com" = "dfsfsf.apps.googleusercontent.com"
   }
@@ -67,6 +73,7 @@ module "cognito" {
 
 ### v1.4
   - Added email configuration options with default or SES
+  - Added user pool client variables to support identity federation configuration.
 
 ### v1.3
   - updated new to Terraform standards
