@@ -164,7 +164,7 @@ variable "read_attributes" {
  description = "(Optional) List of user pool attributes the application client can read from."
 }
 
-variable " write_attributes" {
+variable "write_attributes" {
   type        = list(string)
   default     = []
   description = "(Optional) List of user pool attributes the application client can write to."
