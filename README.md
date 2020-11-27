@@ -74,6 +74,7 @@ module "cognito" {
 ### v1.4
   - Added email configuration options with default or SES
   - Added user pool client variables to support identity federation configuration.
+    - Note that ``explicit_auth_flows`` with prefix 'ALLOW' cannot be used with ``LEGACY`` ``prevent_user_existence_errors`` configuration.
 
 ### v1.3
   - updated new to Terraform standards
