@@ -107,6 +107,12 @@ variable "allowed_oauth_scopes" {
   default     = []
 }
 
+variable "allowed_oauth_flows_user_pool_client" {
+  type        = bool
+  description = "(Optional) Whether the client is allowed to follow the OAuth protocol when interacting with Cognito user pools."
+  default     = true
+}
+
 variable "callback_urls" {
   type        = list(string)
   description = "(Optional) List of allowed callback URLs for the identity providers."
