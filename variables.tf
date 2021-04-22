@@ -187,6 +187,17 @@ variable "acm_certificate_arn" {
   default     = null
 }
 
+variable "create_route53_record" {
+  type    = bool
+  default = false
+}
+
+variable "route53_zone_name" {
+  type        = string
+  default     = null
+  description = "Hosted zone name to create the Route53 records in"
+}
+
 # -----------------------------------------------------------------------------
 # Variables: Cognito Lambda triggers
 # -----------------------------------------------------------------------------

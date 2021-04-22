@@ -13,7 +13,7 @@ resource "aws_cognito_user_pool" "_" {
   name                     = "${local.resource_name}-${var.cognito_identity_pool_name}"
   alias_attributes         = var.alias_attributes
   auto_verified_attributes = var.auto_verified_attributes
-  
+
   lambda_config {
     create_auth_challenge          = var.lambda_create_auth_challenge
     custom_message                 = var.lambda_custom_message
@@ -26,7 +26,7 @@ resource "aws_cognito_user_pool" "_" {
     user_migration                 = var.lambda_user_migration
     verify_auth_challenge_response = var.lambda_verify_auth_challenge_response
   }
-  
+
   admin_create_user_config {
     allow_admin_create_user_only = false
   }
@@ -100,7 +100,7 @@ resource "aws_cognito_user_pool_client" "_" {
 
   allowed_oauth_flows  = var.allowed_oauth_flows
   allowed_oauth_scopes = var.allowed_oauth_scopes
-  
+
   callback_urls        = var.callback_urls
   logout_urls          = var.logout_urls
   default_redirect_uri = var.default_redirect_uri
@@ -133,19 +133,45 @@ resource "aws_cognito_identity_pool" "_" {
   supported_login_providers = var.supported_login_providers
 }
 
+
+# -----------------------------------------------------------------------------
+# Route53 Cognito hosted domain configuration
+# -----------------------------------------------------------------------------
+data "aws_route53_zone" "_" {
+  count = var.create_route53_record ? 1 : 0
+  name  = var.route53_zone_name
+}
+
+resource "aws_route53_record" "auth-cognito-A" {
+  count = var.create_route53_record ? 1 : 0
+
+  name    = aws_cognito_user_pool_domain._.domain
+  type    = "A"
+  zone_id = data.aws_route53_zone._.zone_id
+
+  alias {
+    evaluate_target_health = false
+
+    name = aws_cognito_user_pool_domain._.cloudfront_distribution_arn
+
+    # This zone_id is fixed
+    zone_id = "Z2FDTNDATAQYW2"
+  }
+}
+
 module "identity_provider" {
   source = "./identity-provider"
 
   for_each = var.identity_provider_map
 
-  user_pool_id  = aws_cognito_user_pool._.id
+  user_pool_id = aws_cognito_user_pool._.id
 
   provider_name = each.value.provider_name
   provider_type = each.value.provider_type
 
   authorize_scopes = each.value.authorize_scopes
   client_id        = each.value.client_id
-  client_secret    = each.value.client_secret  
+  client_secret    = each.value.client_secret
 
   attribute_mapping = each.value.attribute_mapping
 }
