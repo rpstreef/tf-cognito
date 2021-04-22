@@ -71,6 +71,10 @@ module "cognito" {
 
 ## Changelog
 
+
+### v1.5
+ - Added custom Domain support for hosted domains.
+
 ### v1.4
   - Added email configuration options with default or SES
   - Added user pool client variables to support identity federation configuration.
