@@ -84,8 +84,10 @@ resource "aws_cognito_user_pool" "_" {
 # https://forums.aws.amazon.com/thread.jspa?threadID=262811
 # -----------------------------------------------------------------------------
 resource "aws_cognito_user_pool_domain" "_" {
-  domain       = local.resource_name
+  domain       = var.user_pool_domain_name
   user_pool_id = aws_cognito_user_pool._.id
+
+  certificate_arn = var.acm_certificate_arn
 }
 
 resource "aws_cognito_user_pool_client" "_" {

@@ -27,14 +27,14 @@ variable "cognito_identity_pool_provider" {
 }
 
 variable "alias_attributes" {
-  type = list(string)
-  default = ["email"]
+  type        = list(string)
+  default     = ["email"]
   description = "(Optional) Attributes supported as an alias for this user pool. Possible values: phone_number, email, or preferred_username. Conflicts with username_attributes. "
 }
 
 variable "auto_verified_attributes" {
-  type = list
-  default = ["email"]
+  type        = list(any)
+  default     = ["email"]
   description = "(Optional) The attributes to be auto-verified. Possible values: email, phone_number. "
 }
 
@@ -45,7 +45,7 @@ variable "schema_map" {
     mutable             = bool
     required            = bool
   }))
-  default = []
+  default     = []
   description = "Creates 1 or more Schema blocks"
 }
 
@@ -86,7 +86,7 @@ variable "supported_login_providers" {
 }
 
 variable "identity_provider_map" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "Configure Identity providers (Federation) such as Google and Facebook"
 }
@@ -140,7 +140,7 @@ variable "logout_urls" {
 variable "explicit_auth_flows" {
   type        = list(string)
   description = "(Optional) List of authentication flows (ADMIN_NO_SRP_AUTH, CUSTOM_AUTH_FLOW_ONLY, USER_PASSWORD_AUTH, ALLOW_ADMIN_USER_PASSWORD_AUTH, ALLOW_CUSTOM_AUTH, ALLOW_USER_PASSWORD_AUTH, ALLOW_USER_SRP_AUTH, ALLOW_REFRESH_TOKEN_AUTH)."
-  default     = [
+  default = [
     "ADMIN_NO_SRP_AUTH",
     "USER_PASSWORD_AUTH"
   ]
@@ -165,15 +165,26 @@ variable "refresh_token_validity" {
 }
 
 variable "read_attributes" {
- type        = list(string)
- default     = []
- description = "(Optional) List of user pool attributes the application client can read from."
+  type        = list(string)
+  default     = []
+  description = "(Optional) List of user pool attributes the application client can read from."
 }
 
 variable "write_attributes" {
   type        = list(string)
   default     = []
   description = "(Optional) List of user pool attributes the application client can write to."
+}
+
+variable "user_pool_domain_name" {
+  type        = string
+  description = "Domain name to use for the hosted solution."
+}
+
+variable "acm_certificate_arn" {
+  type        = string
+  description = "ACM certificate ARN"
+  default     = null
 }
 
 # -----------------------------------------------------------------------------
