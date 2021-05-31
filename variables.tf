@@ -14,6 +14,12 @@ variable "resource_tag_name" {
   description = "Resource tag name for cost tracking"
 }
 
+variable "module_enabled" {
+  type        = bool
+  description = "(Optional) Whether to create resources within the module or not. Default is true."
+  default     = true
+}
+
 # -----------------------------------------------------------------------------
 # Variables: Cognito & S3
 # -----------------------------------------------------------------------------

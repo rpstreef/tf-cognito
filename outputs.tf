@@ -1,27 +1,30 @@
+locals {
+  user_pool = try(aws_cognito_user_pool.user_pool[0], {})
+
+  client = try(aws_cognito_user_pool_client.client[0], {})
+
+  o_user_pool_tags = try(local.user_pool.tags, {})
+
+  o_user_pool = var.module_enabled ? merge(local.user_pool, {
+    tags = local.o_user_pool_tags != null ? local.user_pool.tags : {}
+  }) : null
+}
+
 # -----------------------------------------------------------------------------
 # Outputs: Cognito
 # -----------------------------------------------------------------------------
 
-output "cognito_user_pool_id" {
-  value = aws_cognito_user_pool._.id
+output "user_pool" {
+  description = "The full `aws_cognito_user_pool` object."
+  value       = local.o_user_pool
 }
 
-output "cognito_user_pool_arn" {
-  value = aws_cognito_user_pool._.arn
+output "domain" {
+  description = "The full `aws_cognito_user_pool` object."
+  value       = try(aws_cognito_user_pool_domain.domain[0], null)
 }
 
-output "cognito_user_pool_client_id" {
-  value = aws_cognito_user_pool_client._.id
-}
-
-output "cognito_identity_pool_id" {
-  value = aws_cognito_identity_pool._.id
-}
-
-output "cognito_user_pool_domain" {
-  value = aws_cognito_user_pool_domain._.domain
-}
-
-output "cognito_user_pool_cloudfront_arn" {
-  value = aws_cognito_user_pool_domain._.cloudfront_distribution_arn
+output "client" {
+  description = "All Cognito User Pool Client resources associated with the Cognito User Pool."
+  value       = local.client
 }

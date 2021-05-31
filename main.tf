@@ -10,6 +10,8 @@ locals {
 # -----------------------------------------------------------------------------
 
 resource "aws_cognito_user_pool" "_" {
+  count = var.module_enabled ? 1 : 0
+
   name                     = "${local.resource_name}-${var.cognito_identity_pool_name}"
   alias_attributes         = var.alias_attributes
   auto_verified_attributes = var.auto_verified_attributes
@@ -84,6 +86,8 @@ resource "aws_cognito_user_pool" "_" {
 # https://forums.aws.amazon.com/thread.jspa?threadID=262811
 # -----------------------------------------------------------------------------
 resource "aws_cognito_user_pool_domain" "_" {
+  count = var.module_enabled && var.user_pool_domain_name != null ? 1 : 0
+
   domain       = var.user_pool_domain_name
   user_pool_id = aws_cognito_user_pool._.id
 
@@ -91,6 +95,8 @@ resource "aws_cognito_user_pool_domain" "_" {
 }
 
 resource "aws_cognito_user_pool_client" "_" {
+  count = var.module_enabled ? 1 : 0
+
   name = "${local.resource_name}-client"
 
   user_pool_id    = aws_cognito_user_pool._.id
