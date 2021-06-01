@@ -2,8 +2,8 @@
 # Variables: General
 # -----------------------------------------------------------------------------
 
-variable "namespace" {
-  description = "AWS resource namespace/prefix"
+variable "environment" {
+  description = "AWS resource environment/prefix"
 }
 
 variable "region" {
