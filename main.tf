@@ -10,23 +10,23 @@ locals {
 # -----------------------------------------------------------------------------
 
 resource "aws_cognito_user_pool" "_" {
-  count = var.module_enabled ? 1 : 0
+  count = var.cognito_module_enabled ? 1 : 0
 
   name                     = "${local.resource_name}-${var.cognito_identity_pool_name}"
-  alias_attributes         = var.alias_attributes
-  auto_verified_attributes = var.auto_verified_attributes
+  alias_attributes         = var.cognito_alias_attributes
+  auto_verified_attributes = var.cognito_auto_verified_attributes
 
   lambda_config {
-    create_auth_challenge          = var.lambda_create_auth_challenge
-    custom_message                 = var.lambda_custom_message
-    define_auth_challenge          = var.lambda_define_auth_challenge
-    post_authentication            = var.lambda_post_authentication
-    post_confirmation              = var.lambda_post_confirmation
-    pre_authentication             = var.lambda_pre_authentication
-    pre_sign_up                    = var.lambda_pre_sign_up
-    pre_token_generation           = var.lambda_pre_token_generation
-    user_migration                 = var.lambda_user_migration
-    verify_auth_challenge_response = var.lambda_verify_auth_challenge_response
+    create_auth_challenge          = var.cognito_lambda_create_auth_challenge
+    custom_message                 = var.cognito_lambda_custom_message
+    define_auth_challenge          = var.cognito_lambda_define_auth_challenge
+    post_authentication            = var.cognito_lambda_post_authentication
+    post_confirmation              = var.cognito_lambda_post_confirmation
+    pre_authentication             = var.cognito_lambda_pre_authentication
+    pre_sign_up                    = var.cognito_lambda_pre_sign_up
+    pre_token_generation           = var.cognito_lambda_pre_token_generation
+    user_migration                 = var.cognito_lambda_user_migration
+    verify_auth_challenge_response = var.cognito_lambda_verify_auth_challenge_response
   }
 
   admin_create_user_config {
@@ -34,10 +34,10 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   email_configuration {
-    email_sending_account  = var.email_sending_account
-    reply_to_email_address = var.email_reply_to_address
-    source_arn             = var.email_source_arn
-    from_email_address     = var.email_from_address
+    email_sending_account  = var.cognito_email_sending_account
+    reply_to_email_address = var.cognito_email_reply_to_address
+    source_arn             = var.cognito_email_source_arn
+    from_email_address     = var.cognito_email_from_address
   }
 
   password_policy {
@@ -49,7 +49,7 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   dynamic "schema" {
-    for_each = var.schema_map
+    for_each = var.cognito_schema_map
 
     content {
       name                = schema.value.name
@@ -60,11 +60,11 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   verification_message_template {
-    default_email_option  = var.default_email_option
-    email_message         = var.email_message
-    email_message_by_link = var.email_message_by_link
-    email_subject         = var.email_subject
-    email_subject_by_link = var.email_subject_by_link
+    default_email_option  = var.cognito_default_email_option
+    email_message         = var.cognito_email_message
+    email_message_by_link = var.cognito_email_message_by_link
+    email_subject         = var.cognito_email_subject
+    email_subject_by_link = var.cognito_email_subject_by_link
   }
 
   lifecycle {
