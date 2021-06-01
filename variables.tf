@@ -184,6 +184,7 @@ variable "write_attributes" {
 
 variable "user_pool_domain_name" {
   type        = string
+  default     = null
   description = "Domain name to use for the hosted solution."
 }
 
