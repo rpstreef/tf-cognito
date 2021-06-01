@@ -1,5 +1,10 @@
 locals {
   resource_name = "${var.namespace}-${var.resource_tag_name}"
+
+  tags = {
+    Environment = var.namespace
+    Name        = var.resource_tag_name
+  }
 }
 
 # -----------------------------------------------------------------------------
@@ -75,10 +80,7 @@ resource "aws_cognito_user_pool" "_" {
     ]
   }
 
-  tags = {
-    Environment = var.namespace
-    Name        = var.resource_tag_name
-  }
+  tags = local.tags
 }
 
 # -----------------------------------------------------------------------------

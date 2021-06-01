@@ -1,7 +1,7 @@
 locals {
-  user_pool = try(aws_cognito_user_pool.user_pool[0], {})
+  user_pool = try(aws_cognito_user_pool._[0], {})
 
-  client = try(aws_cognito_user_pool_client.client[0], {})
+  client = try(aws_cognito_user_pool_client._[0], {})
 
   o_user_pool_tags = try(local.user_pool.tags, {})
 
@@ -21,7 +21,7 @@ output "user_pool" {
 
 output "domain" {
   description = "The full `aws_cognito_user_pool` object."
-  value       = try(aws_cognito_user_pool_domain.domain[0], null)
+  value       = try(aws_cognito_user_pool_domain._[0], null)
 }
 
 output "client" {
