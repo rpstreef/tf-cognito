@@ -168,7 +168,7 @@ resource "aws_route53_record" "auth-cognito-A" {
 }
 
 module "identity_provider" {
-  source = "./identity-provider"
+  source = "./module/identity-provider"
 
   for_each = var.identity_provider_map
 
