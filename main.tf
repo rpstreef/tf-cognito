@@ -1,6 +1,8 @@
 locals {
   resource_name = "${var.namespace}-${var.resource_tag_name}"
 
+  jwk_url = "https://cognito-idp.${var.region}.amazonaws.com/${one(aws_cognito_user_pool._.*.id)}/.well-known/jwks.json"
+
   tags = {
     Environment = var.namespace
     Name        = var.resource_tag_name

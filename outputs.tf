@@ -28,3 +28,8 @@ output "client" {
   description = "All Cognito User Pool Client resources associated with the Cognito User Pool."
   value       = local.client
 }
+
+output "jwk_url" {
+  description = "JWK URL for this cognito user pool"
+  value       = local.jwk_url
+}
