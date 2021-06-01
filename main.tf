@@ -89,7 +89,7 @@ resource "aws_cognito_user_pool_domain" "_" {
   count = var.module_enabled && var.user_pool_domain_name != null ? 1 : 0
 
   domain       = var.user_pool_domain_name
-  user_pool_id = aws_cognito_user_pool._.id
+  user_pool_id = one(aws_cognito_user_pool._.*.id)
 
   certificate_arn = var.acm_certificate_arn
 }
@@ -99,7 +99,7 @@ resource "aws_cognito_user_pool_client" "_" {
 
   name = "${local.resource_name}-client"
 
-  user_pool_id    = aws_cognito_user_pool._.id
+  user_pool_id    = one(aws_cognito_user_pool._.*.id)
   generate_secret = var.generate_secret
 
   allowed_oauth_flows_user_pool_client = var.allowed_oauth_flows_user_pool_client
@@ -153,14 +153,14 @@ data "aws_route53_zone" "_" {
 resource "aws_route53_record" "auth-cognito-A" {
   count = var.create_route53_record ? 1 : 0
 
-  name    = aws_cognito_user_pool_domain._.domain
+  name    = one(aws_cognito_user_pool_domain._.*.domain)
   type    = "A"
   zone_id = one(data.aws_route53_zone._.*.zone_id)
 
   alias {
     evaluate_target_health = false
 
-    name = aws_cognito_user_pool_domain._.cloudfront_distribution_arn
+    name = one(aws_cognito_user_pool_domain._.*.cloudfront_distribution_arn)
 
     # This zone_id is fixed
     zone_id = "Z2FDTNDATAQYW2"
@@ -172,7 +172,7 @@ module "identity_provider" {
 
   for_each = var.identity_provider_map
 
-  user_pool_id = aws_cognito_user_pool._.id
+  user_pool_id = one(aws_cognito_user_pool._.*.id)
 
   provider_name = each.value.provider_name
   provider_type = each.value.provider_type
