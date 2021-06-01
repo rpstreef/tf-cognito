@@ -86,45 +86,45 @@ resource "aws_cognito_user_pool" "_" {
 # https://forums.aws.amazon.com/thread.jspa?threadID=262811
 # -----------------------------------------------------------------------------
 resource "aws_cognito_user_pool_domain" "_" {
-  count = var.module_enabled && var.user_pool_domain_name != null ? 1 : 0
+  count = var.cognito_module_enabled && var.cognito_user_pool_domain_name != null ? 1 : 0
 
-  domain       = var.user_pool_domain_name
+  domain       = var.cognito_user_pool_domain_name
   user_pool_id = one(aws_cognito_user_pool._.*.id)
 
-  certificate_arn = var.acm_certificate_arn
+  certificate_arn = var.cognito_acm_certificate_arn
 }
 
 resource "aws_cognito_user_pool_client" "_" {
-  count = var.module_enabled ? 1 : 0
+  count = var.cognito_module_enabled ? 1 : 0
 
   name = "${local.resource_name}-client"
 
   user_pool_id    = one(aws_cognito_user_pool._.*.id)
-  generate_secret = var.generate_secret
+  generate_secret = var.cognito_generate_secret
 
-  allowed_oauth_flows_user_pool_client = var.allowed_oauth_flows_user_pool_client
+  allowed_oauth_flows_user_pool_client = var.cognito_allowed_oauth_flows_user_pool_client
 
-  allowed_oauth_flows  = var.allowed_oauth_flows
-  allowed_oauth_scopes = var.allowed_oauth_scopes
+  allowed_oauth_flows  = var.cognito_allowed_oauth_flows
+  allowed_oauth_scopes = var.cognito_allowed_oauth_scopes
 
-  callback_urls        = var.callback_urls
-  logout_urls          = var.logout_urls
-  default_redirect_uri = var.default_redirect_uri
+  callback_urls        = var.cognito_callback_urls
+  logout_urls          = var.cognito_logout_urls
+  default_redirect_uri = var.cognito_default_redirect_uri
 
-  supported_identity_providers = var.supported_identity_providers
+  supported_identity_providers = var.cognito_supported_identity_providers
 
-  prevent_user_existence_errors = var.prevent_user_existence_errors
+  prevent_user_existence_errors = var.cognito_prevent_user_existence_errors
 
-  refresh_token_validity = var.refresh_token_validity
+  refresh_token_validity = var.cognito_refresh_token_validity
 
-  explicit_auth_flows = var.explicit_auth_flows
+  explicit_auth_flows = var.cognito_explicit_auth_flows
 
-  read_attributes  = var.read_attributes
-  write_attributes = var.write_attributes
+  read_attributes  = var.cognito_read_attributes
+  write_attributes = var.cognito_write_attributes
 }
 
 resource "aws_cognito_identity_pool" "_" {
-  count = var.module_enabled ? 1 : 0
+  count = var.cognito_module_enabled ? 1 : 0
   
   identity_pool_name      = var.cognito_identity_pool_name
   developer_provider_name = var.cognito_identity_pool_provider
@@ -138,7 +138,7 @@ resource "aws_cognito_identity_pool" "_" {
     provider_name = "cognito-idp.${var.region}.amazonaws.com/${one(aws_cognito_user_pool._.*.id)}"
   }
 
-  supported_login_providers = var.supported_login_providers
+  supported_login_providers = var.cognito_supported_login_providers
 }
 
 
@@ -146,12 +146,12 @@ resource "aws_cognito_identity_pool" "_" {
 # Route53 Cognito hosted domain configuration
 # -----------------------------------------------------------------------------
 data "aws_route53_zone" "_" {
-  count = var.create_route53_record ? 1 : 0
-  name  = var.route53_zone_name
+  count = var.cognito_create_route53_record ? 1 : 0
+  name  = var.cognito_route53_zone_name
 }
 
 resource "aws_route53_record" "auth-cognito-A" {
-  count = var.create_route53_record ? 1 : 0
+  count = var.cognito_create_route53_record ? 1 : 0
 
   name    = one(aws_cognito_user_pool_domain._.*.domain)
   type    = "A"
@@ -170,7 +170,7 @@ resource "aws_route53_record" "auth-cognito-A" {
 module "identity_provider" {
   source = "./module/identity-provider"
 
-  for_each = var.identity_provider_map
+  for_each = var.cognito_identity_provider_map
 
   user_pool_id = one(aws_cognito_user_pool._.*.id)
 
