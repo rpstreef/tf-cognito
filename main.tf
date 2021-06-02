@@ -19,21 +19,21 @@ locals {
 resource "aws_cognito_user_pool" "_" {
   count = var.cognito_module_enabled ? 1 : 0
 
-  name                     = "${local.resource_name}-${var.cognito_identity_pool_name}"
-  alias_attributes         = var.cognito_alias_attributes
-  auto_verified_attributes = var.cognito_auto_verified_attributes
+  name                     = "${local.resource_name}-${var.identity_pool_name}"
+  alias_attributes         = var.alias_attributes
+  auto_verified_attributes = var.auto_verified_attributes
 
   lambda_config {
-    create_auth_challenge          = var.cognito_lambda_create_auth_challenge
-    custom_message                 = var.cognito_lambda_custom_message
-    define_auth_challenge          = var.cognito_lambda_define_auth_challenge
-    post_authentication            = var.cognito_lambda_post_authentication
-    post_confirmation              = var.cognito_lambda_post_confirmation
-    pre_authentication             = var.cognito_lambda_pre_authentication
-    pre_sign_up                    = var.cognito_lambda_pre_sign_up
-    pre_token_generation           = var.cognito_lambda_pre_token_generation
-    user_migration                 = var.cognito_lambda_user_migration
-    verify_auth_challenge_response = var.cognito_lambda_verify_auth_challenge_response
+    create_auth_challenge          = var.lambda_create_auth_challenge
+    custom_message                 = var.lambda_custom_message
+    define_auth_challenge          = var.lambda_define_auth_challenge
+    post_authentication            = var.lambda_post_authentication
+    post_confirmation              = var.lambda_post_confirmation
+    pre_authentication             = var.lambda_pre_authentication
+    pre_sign_up                    = var.lambda_pre_sign_up
+    pre_token_generation           = var.lambda_pre_token_generation
+    user_migration                 = var.lambda_user_migration
+    verify_auth_challenge_response = var.lambda_verify_auth_challenge_response
   }
 
   admin_create_user_config {
@@ -41,10 +41,10 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   email_configuration {
-    email_sending_account  = var.cognito_email_sending_account
-    reply_to_email_address = var.cognito_email_reply_to_address
-    source_arn             = var.cognito_email_source_arn
-    from_email_address     = var.cognito_email_from_address
+    email_sending_account  = var.email_sending_account
+    reply_to_email_address = var.email_reply_to_address
+    source_arn             = var.email_source_arn
+    from_email_address     = var.email_from_address
   }
 
   password_policy {
@@ -56,7 +56,7 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   dynamic "schema" {
-    for_each = var.cognito_schema_map
+    for_each = var.schema_map
 
     content {
       name                = schema.value.name
@@ -67,11 +67,11 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   verification_message_template {
-    default_email_option  = var.cognito_default_email_option
-    email_message         = var.cognito_email_message
-    email_message_by_link = var.cognito_email_message_by_link
-    email_subject         = var.cognito_email_subject
-    email_subject_by_link = var.cognito_email_subject_by_link
+    default_email_option  = var.default_email_option
+    email_message         = var.email_message
+    email_message_by_link = var.email_message_by_link
+    email_subject         = var.email_subject
+    email_subject_by_link = var.email_subject_by_link
   }
 
   lifecycle {
@@ -90,12 +90,12 @@ resource "aws_cognito_user_pool" "_" {
 # https://forums.aws.amazon.com/thread.jspa?threadID=262811
 # -----------------------------------------------------------------------------
 resource "aws_cognito_user_pool_domain" "_" {
-  count = var.cognito_module_enabled && var.cognito_user_pool_domain_name != null ? 1 : 0
+  count = var.cognito_module_enabled && var.user_pool_domain_name != null ? 1 : 0
 
-  domain       = var.cognito_user_pool_domain_name
+  domain       = var.user_pool_domain_name
   user_pool_id = one(aws_cognito_user_pool._.*.id)
 
-  certificate_arn = var.cognito_acm_certificate_arn
+  certificate_arn = var.acm_certificate_arn
 }
 
 resource "aws_cognito_user_pool_client" "_" {
@@ -104,34 +104,34 @@ resource "aws_cognito_user_pool_client" "_" {
   name = "${local.resource_name}-client"
 
   user_pool_id    = one(aws_cognito_user_pool._.*.id)
-  generate_secret = var.cognito_generate_secret
+  generate_secret = var.generate_secret
 
-  allowed_oauth_flows_user_pool_client = var.cognito_allowed_oauth_flows_user_pool_client
+  allowed_oauth_flows_user_pool_client = var.allowed_oauth_flows_user_pool_client
 
-  allowed_oauth_flows  = var.cognito_allowed_oauth_flows
-  allowed_oauth_scopes = var.cognito_allowed_oauth_scopes
+  allowed_oauth_flows  = var.allowed_oauth_flows
+  allowed_oauth_scopes = var.allowed_oauth_scopes
 
-  callback_urls        = var.cognito_callback_urls
-  logout_urls          = var.cognito_logout_urls
-  default_redirect_uri = var.cognito_default_redirect_uri
+  callback_urls        = var.callback_urls
+  logout_urls          = var.logout_urls
+  default_redirect_uri = var.default_redirect_uri
 
-  supported_identity_providers = var.cognito_supported_identity_providers
+  supported_identity_providers = var.supported_identity_providers
 
-  prevent_user_existence_errors = var.cognito_prevent_user_existence_errors
+  prevent_user_existence_errors = var.prevent_user_existence_errors
 
-  refresh_token_validity = var.cognito_refresh_token_validity
+  refresh_token_validity = var.refresh_token_validity
 
-  explicit_auth_flows = var.cognito_explicit_auth_flows
+  explicit_auth_flows = var.explicit_auth_flows
 
-  read_attributes  = var.cognito_read_attributes
-  write_attributes = var.cognito_write_attributes
+  read_attributes  = var.read_attributes
+  write_attributes = var.write_attributes
 }
 
 resource "aws_cognito_identity_pool" "_" {
   count = var.cognito_module_enabled ? 1 : 0
   
-  identity_pool_name      = var.cognito_identity_pool_name
-  developer_provider_name = var.cognito_identity_pool_provider
+  identity_pool_name      = var.identity_pool_name
+  developer_provider_name = var.identity_pool_provider
 
   allow_unauthenticated_identities = false
 
@@ -142,7 +142,7 @@ resource "aws_cognito_identity_pool" "_" {
     provider_name = "cognito-idp.${var.region}.amazonaws.com/${one(aws_cognito_user_pool._.*.id)}"
   }
 
-  supported_login_providers = var.cognito_supported_login_providers
+  supported_login_providers = var.supported_login_providers
 }
 
 
@@ -150,12 +150,12 @@ resource "aws_cognito_identity_pool" "_" {
 # Route53 Cognito hosted domain configuration
 # -----------------------------------------------------------------------------
 data "aws_route53_zone" "_" {
-  count = var.cognito_create_route53_record ? 1 : 0
-  name  = var.cognito_route53_zone_name
+  count = var.create_route53_record ? 1 : 0
+  name  = var.route53_zone_name
 }
 
 resource "aws_route53_record" "auth-cognito-A" {
-  count = var.cognito_create_route53_record ? 1 : 0
+  count = var.create_route53_record ? 1 : 0
 
   name    = one(aws_cognito_user_pool_domain._.*.domain)
   type    = "A"
@@ -174,7 +174,7 @@ resource "aws_route53_record" "auth-cognito-A" {
 module "identity_provider" {
   source = "./module/identity-provider"
 
-  for_each = var.cognito_identity_provider_map
+  for_each = var.identity_provider_map
 
   user_pool_id = one(aws_cognito_user_pool._.*.id)
 
