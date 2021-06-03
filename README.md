@@ -72,7 +72,7 @@ module "cognito" {
 ## Changelog
 
 ### v1.6
- - Added "module_enabled", default set to true.
+ - Added "cognito_module_enabled", default set to true.
  - Changed output to display whole resource objects created
 
 ### v1.5
