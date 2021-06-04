@@ -1,7 +1,7 @@
 locals {
   resource_name = "${var.environment}-${var.resource_tag_name}"
 
-  jwk_url = "https://cognito-idp.${var.region}.amazonaws.com/${one(aws_cognito_user_pool._.*.id)}/.well-known/jwks.json"
+  jwk_url = "https://cognito-idp.${var.region}.amazonaws.com/${try(one(aws_cognito_user_pool._.*.id), "")}/.well-known/jwks.json"
 
   tags = {
     Environment = var.environment
@@ -93,7 +93,7 @@ resource "aws_cognito_user_pool_domain" "_" {
   count = var.cognito_module_enabled && var.user_pool_domain_name != null ? 1 : 0
 
   domain       = var.user_pool_domain_name
-  user_pool_id = one(aws_cognito_user_pool._.*.id)
+  user_pool_id = try(one(aws_cognito_user_pool._.*.id), "")
 
   certificate_arn = var.acm_certificate_arn
 }
@@ -103,7 +103,7 @@ resource "aws_cognito_user_pool_client" "_" {
 
   name = "${local.resource_name}-client"
 
-  user_pool_id    = one(aws_cognito_user_pool._.*.id)
+  user_pool_id    = try(one(aws_cognito_user_pool._.*.id), "")
   generate_secret = var.generate_secret
 
   allowed_oauth_flows_user_pool_client = var.allowed_oauth_flows_user_pool_client
@@ -136,10 +136,10 @@ resource "aws_cognito_identity_pool" "_" {
   allow_unauthenticated_identities = false
 
   cognito_identity_providers {
-    client_id               = one(aws_cognito_user_pool_client._.*.id)
+    client_id               = try(one(aws_cognito_user_pool_client._.*.id), "")
     server_side_token_check = true
 
-    provider_name = "cognito-idp.${var.region}.amazonaws.com/${one(aws_cognito_user_pool._.*.id)}"
+    provider_name = "cognito-idp.${var.region}.amazonaws.com/${try(one(aws_cognito_user_pool._.*.id), "")}"
   }
 
   supported_login_providers = var.supported_login_providers
@@ -151,20 +151,21 @@ resource "aws_cognito_identity_pool" "_" {
 # -----------------------------------------------------------------------------
 data "aws_route53_zone" "_" {
   count = var.create_route53_record ? 1 : 0
+
   name  = var.route53_zone_name
 }
 
 resource "aws_route53_record" "auth-cognito-A" {
   count = var.create_route53_record ? 1 : 0
 
-  name    = one(aws_cognito_user_pool_domain._.*.domain)
+  name    = try(one(aws_cognito_user_pool_domain._.*.domain), "")
   type    = "A"
-  zone_id = one(data.aws_route53_zone._.*.zone_id)
+  zone_id = try(one(data.aws_route53_zone._.*.zone_id), "")
 
   alias {
     evaluate_target_health = false
 
-    name = one(aws_cognito_user_pool_domain._.*.cloudfront_distribution_arn)
+    name = try(one(aws_cognito_user_pool_domain._.*.cloudfront_distribution_arn), "")
 
     # This zone_id is fixed
     zone_id = "Z2FDTNDATAQYW2"
@@ -176,7 +177,7 @@ module "identity_provider" {
 
   for_each = var.identity_provider_map
 
-  user_pool_id = one(aws_cognito_user_pool._.*.id)
+  user_pool_id = try(one(aws_cognito_user_pool._.*.id), "")
 
   provider_name = each.value.provider_name
   provider_type = each.value.provider_type
