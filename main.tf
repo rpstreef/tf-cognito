@@ -1,7 +1,7 @@
 locals {
   resource_name = "${var.environment}-${var.resource_tag_name}"
 
-  jwk_url = "https://cognito-idp.${var.region}.amazonaws.com/${try(one(aws_cognito_user_pool._.*.id), "cognito_module_disabled")}/.well-known/jwks.json"
+  jwk_url = one(aws_cognito_user_pool._.*.id) == null ? "module_disable" : "https://cognito-idp.${var.region}.amazonaws.com/${one(aws_cognito_user_pool._.*.id)}/.well-known/jwks.json"
 
   tags = {
     Environment = var.environment
